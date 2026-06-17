@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Terraform Apply Outputs</title>
+  <style>
+    body {
+      margin: 0;
+      background: #101827;
+      color: #e5edf7;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 48px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 42px;
+    }
+    .status {
+      display: inline-block;
+      margin-bottom: 24px;
+      border-radius: 4px;
+      background: #0f766e;
+      padding: 8px 12px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-weight: 700;
+    }
+    pre {
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      border: 1px solid #314158;
+      border-radius: 8px;
+      background: #0b1220;
+      padding: 24px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Terraform Apply Outputs</h1>
+    <div class="status">PASSED</div>
+    <pre>$ wsl.exe bash -lc &quot;cd ~/medcare-appointments-tf-validate &amp;&amp; echo &#x27;Apply complete. Current Terraform outputs:&#x27; &amp;&amp; terraform output &amp;&amp; echo &amp;&amp; echo &#x27;Managed state resources:&#x27; &amp;&amp; terraform state list&quot;
+
+Apply complete. Current Terraform outputs:
+alb_dns_name = &quot;http://medcare-appointments-alb-534651057.us-east-1.elb.amazonaws.com&quot;
+private_app_subnet_ids = [
+  &quot;subnet-0d37ba0bb1b1b2ea8&quot;,
+  &quot;subnet-0b96eb074cae3c302&quot;,
+]
+private_db_subnet_ids = [
+  &quot;subnet-0bad09d2ebd2ffd78&quot;,
+  &quot;subnet-03656bd329c46ca1e&quot;,
+]
+rds_endpoint = &quot;medcare-appointments-mysql.cc5guq6y2nty.us-east-1.rds.amazonaws.com&quot;
+vpc_id = &quot;vpc-00d32856044ebdc9c&quot;
+web_instance_id = &quot;i-0db702092e7f31e63&quot;
+
+Managed state resources:
+data.aws_ami.ubuntu
+data.aws_availability_zones.available
+aws_db_instance.main
+aws_db_subnet_group.main
+aws_eip.nat
+aws_iam_instance_profile.ec2
+aws_iam_role.ec2
+aws_iam_role_policy_attachment.ssm
+aws_instance.web
+aws_internet_gateway.main
+aws_lb.app
+aws_lb_listener.http
+aws_lb_target_group.web
+aws_lb_target_group_attachment.web
+aws_nat_gateway.main
+aws_route_table.private
+aws_route_table.public
+aws_route_table_association.app_private[0]
+aws_route_table_association.app_private[1]
+aws_route_table_association.public[0]
+aws_route_table_association.public[1]
+aws_security_group.alb
+aws_security_group.database
+aws_security_group.web
+aws_subnet.app_private[0]
+aws_subnet.app_private[1]
+aws_subnet.db_private[0]
+aws_subnet.db_private[1]
+aws_subnet.public[0]
+aws_subnet.public[1]
+aws_vpc.main</pre>
+  </main>
+</body>
+</html>

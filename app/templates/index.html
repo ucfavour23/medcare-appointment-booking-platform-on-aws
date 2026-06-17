@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MedCare Appointments</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero">
+            <div>
+                <p class="eyebrow">MedCare Clinic Network</p>
+                <h1>Appointment Booking</h1>
+                <p class="summary">Schedule and track patient visits through a production-style web tier backed by private database storage.</p>
+            </div>
+            <div class="status">
+                <span>ALB</span>
+                <span>Private EC2</span>
+                <span>RDS MySQL</span>
+            </div>
+        </section>
+
+        <section class="workspace">
+            <form class="panel" method="post" action="{{ url_for('create_appointment') }}">
+                <h2>New Appointment</h2>
+                <label>
+                    Patient name
+                    <input name="patient_name" required placeholder="Ada Johnson">
+                </label>
+                <label>
+                    Email
+                    <input type="email" name="email" required placeholder="ada@example.com">
+                </label>
+                <div class="grid">
+                    <label>
+                        Department
+                        <select name="department" required>
+                            <option>General Medicine</option>
+                            <option>Pediatrics</option>
+                            <option>Cardiology</option>
+                            <option>Diagnostics</option>
+                        </select>
+                    </label>
+                    <label>
+                        Date
+                        <input type="date" name="appointment_date" required>
+                    </label>
+                </div>
+                <label>
+                    Notes
+                    <textarea name="notes" rows="4" placeholder="Symptoms, referral notes, or visit context"></textarea>
+                </label>
+                <button type="submit">Book Appointment</button>
+            </form>
+
+            <section class="panel">
+                <h2>Recent Appointments</h2>
+                {% if appointments %}
+                    <div class="appointments">
+                        {% for appointment in appointments %}
+                            <article class="appointment">
+                                <div>
+                                    <h3>{{ appointment.patient_name }}</h3>
+                                    <p>{{ appointment.department }} · {{ appointment.appointment_date }}</p>
+                                </div>
+                                <a href="mailto:{{ appointment.email }}">{{ appointment.email }}</a>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="empty">No appointments yet. Create the first booking to confirm the workflow.</p>
+                {% endif %}
+            </section>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,7 @@
+aws_region         = "us-east-1"
+project_name       = "medcare-appointments"
+allowed_http_cidr  = "0.0.0.0/0"
+instance_type      = "t3.micro"
+db_name            = "medcare"
+db_username        = "medcare_app"
+db_password        = "ReplaceWithAStrongPassword123!"

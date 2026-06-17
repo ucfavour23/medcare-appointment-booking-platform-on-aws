@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Terraform Validate</title>
+  <style>
+    body {
+      margin: 0;
+      background: #101827;
+      color: #e5edf7;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 48px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 42px;
+    }
+    .status {
+      display: inline-block;
+      margin-bottom: 24px;
+      border-radius: 4px;
+      background: #0f766e;
+      padding: 8px 12px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-weight: 700;
+    }
+    pre {
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      border: 1px solid #314158;
+      border-radius: 8px;
+      background: #0b1220;
+      padding: 24px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Terraform Validate</h1>
+    <div class="status">PASSED</div>
+    <pre>$ wsl.exe bash -lc &quot;cd ~/medcare-appointments-tf-validate &amp;&amp; terraform validate&quot;
+
+[32m[1mSuccess![0m The configuration is valid.
+[0m</pre>
+  </main>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ALB Target Health</title>
+  <style>
+    body {
+      margin: 0;
+      background: #101827;
+      color: #e5edf7;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 48px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 42px;
+    }
+    .status {
+      display: inline-block;
+      margin-bottom: 24px;
+      border-radius: 4px;
+      background: #0f766e;
+      padding: 8px 12px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-weight: 700;
+    }
+    pre {
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      border: 1px solid #314158;
+      border-radius: 8px;
+      background: #0b1220;
+      padding: 24px;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>ALB Target Health</h1>
+    <div class="status">PASSED</div>
+    <pre>$ wsl.exe bash -lc &quot;aws elbv2 describe-target-health --target-group-arn arn:aws:elasticloadbalancing:us-east-1:755431180020:targetgroup/medcare-appointments-tg/06e1d2233569eb62 --output table&quot;
+
+------------------------------------------------------------------
+|                      DescribeTargetHealth                      |
++----------------------------------------------------------------+
+||                   TargetHealthDescriptions                   ||
+|+-------------------------------------------+------------------+|
+||  HealthCheckPort                          |  5000            ||
+|+-------------------------------------------+------------------+|
+|||                   AdministrativeOverride                   |||
+||+-------------+----------------------------------------------+||
+|||  Description|  No override is currently active on target   |||
+|||  Reason     |  AdministrativeOverride.NoOverride           |||
+|||  State      |  no_override                                 |||
+||+-------------+----------------------------------------------+||
+|||                           Target                           |||
+||+--------------+---------------------------------------------+||
+|||  Id          |  i-0db702092e7f31e63                        |||
+|||  Port        |  5000                                       |||
+||+--------------+---------------------------------------------+||
+|||                        TargetHealth                        |||
+||+--------------------------+---------------------------------+||
+|||  State                   |  healthy                        |||
+||+--------------------------+---------------------------------+||</pre>
+  </main>
+</body>
+</html>
