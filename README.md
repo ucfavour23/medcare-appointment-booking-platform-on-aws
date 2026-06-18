@@ -6,7 +6,7 @@
 ![Python](https://img.shields.io/badge/Python-Flask-3776AB)
 ![Docker](https://img.shields.io/badge/Runtime-Docker-2496ED)
 
-Production-style healthcare appointment booking platform deployed on AWS with a public Application Load Balancer, private EC2 application tier, private RDS MySQL database tier, Terraform automation, CI checks, optional HTTPS, and deployment evidence.
+Healthcare appointment booking platform deployed on AWS with a public Application Load Balancer, private EC2 application tier, private RDS MySQL database tier, Terraform automation, CI checks, optional HTTPS, and deployment evidence.
 
 ![MedCare appointment dashboard](docs/screenshots/app-local.png)
 
@@ -14,7 +14,7 @@ Production-style healthcare appointment booking platform deployed on AWS with a 
 
 | Category | Details |
 | --- | --- |
-| Project type | Cloud infrastructure and web application portfolio project |
+| Project type | AWS three-tier web application |
 | Business case | Secure internal appointment scheduling for a healthcare clinic network |
 | Application | Flask appointment booking app with local SQLite and AWS RDS MySQL modes |
 | Cloud architecture | VPC, public subnets, private app subnets, private DB subnets, ALB, EC2, RDS |
@@ -22,15 +22,15 @@ Production-style healthcare appointment booking platform deployed on AWS with a 
 | Automation | Terraform provisioning, EC2 bootstrap script, Docker runtime, GitHub Actions CI |
 | Evidence | Local app, test suite, Terraform workflow, ALB health, live AWS app, EC2 service status |
 
-## Recruiter Review Path
+## Review Path
 
 If you only have a few minutes, review these sections first:
 
 1. [Project evidence](#project-evidence) for screenshots proving the build.
 2. [Architecture](#architecture) for the AWS design.
-3. [Security and reliability](#security-and-reliability) for production-minded decisions.
+3. [Security and reliability](#security-and-reliability) for the network and application safeguards.
 4. [Validation](#validation) for tests and infrastructure checks.
-5. [Recruiter brief](docs/recruiter-brief.md) for a concise interview-ready summary.
+5. [Review brief](docs/review-brief.md) for a concise summary.
 
 ## Business Problem
 
@@ -49,7 +49,7 @@ The platform addresses:
 
 This repository combines a working Flask booking application with Terraform-managed AWS infrastructure. The app runs locally with SQLite for quick development and testing, then runs on EC2 against RDS MySQL in the AWS deployment.
 
-The result is a complete cloud portfolio project: application code, infrastructure-as-code, Docker packaging, CI validation, deployment documentation, and screenshots that prove the live system.
+The result is a documented AWS build with application code, infrastructure-as-code, Docker packaging, CI validation, deployment notes, and screenshots from the local and AWS validation paths.
 
 ## Architecture
 
@@ -100,7 +100,7 @@ flowchart TD
 - Appointment booking form
 - Recent appointment history
 - Local SQLite development mode
-- RDS MySQL production-style mode
+- RDS MySQL deployment mode
 - Docker and Docker Compose support
 - Terraform VPC, ALB, EC2, RDS, IAM, NAT Gateway, route tables, and security groups
 - GitHub Actions workflow for tests, Terraform checks, and Docker build
@@ -121,7 +121,7 @@ flowchart TD
 
 ## Project Evidence
 
-The repository includes screenshots in `docs/screenshots/` to show the project working beyond code alone.
+The repository includes screenshots in `docs/screenshots/` covering the app, Terraform workflow, ALB health, and EC2 service status.
 
 | Evidence | Screenshot |
 | --- | --- |
@@ -142,7 +142,7 @@ See the [screenshot evidence guide](docs/screenshots.md) for the capture checkli
 
 ```text
 app/                    Flask appointment booking application
-docs/                   Architecture, deployment, screenshot, and recruiter docs
+docs/                   Architecture, deployment, screenshot, and review docs
 scripts/                Evidence and health-check helper scripts
 terraform/              AWS infrastructure-as-code
 tests/                  Flask application tests
@@ -238,7 +238,7 @@ wsl.exe bash -lc "cd ~/medcare-appointments-tf-validate && terraform validate"
 - [Deployment guide](docs/deployment-guide.md)
 - [Screenshot evidence guide](docs/screenshots.md)
 - [Project review](docs/project-review.md)
-- [Recruiter brief](docs/recruiter-brief.md)
+- [Review brief](docs/review-brief.md)
 - [Project completion notes](docs/project-completion.md)
 
 ## Cost Control
@@ -251,4 +251,4 @@ terraform destroy
 
 ## Skills Demonstrated
 
-AWS networking, private subnet design, load balancing, RDS database deployment, Terraform infrastructure-as-code, Flask backend development, Docker packaging, GitHub Actions CI, security hardening, deployment evidence, and professional project documentation.
+AWS networking, private subnet design, load balancing, RDS database deployment, Terraform infrastructure-as-code, Flask backend development, Docker packaging, GitHub Actions CI, security hardening, deployment evidence, and technical documentation.

@@ -1,6 +1,6 @@
 # Screenshot Evidence Guide
 
-This project keeps GitHub documentation screenshots in `docs/screenshots/`. The goal is to prove the application, infrastructure, and deployment workflow at a glance.
+This project keeps GitHub documentation screenshots in `docs/screenshots/`. The screenshots should show the app workflow, Terraform checks, AWS deployment outputs, and live service health.
 
 ## Included Evidence
 

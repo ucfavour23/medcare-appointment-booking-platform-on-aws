@@ -2,7 +2,7 @@
 
 ## Current Status
 
-The project has a complete end-to-end cloud portfolio slice:
+The project has a complete end-to-end AWS deployment slice:
 
 - Flask appointment booking app
 - Local SQLite development and test mode

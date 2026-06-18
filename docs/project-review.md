@@ -2,7 +2,7 @@
 
 ## Summary
 
-MedCare Appointment Booking Platform is ready to present as a recruiter-facing AWS portfolio project. It includes a working Flask application, Terraform infrastructure, private network tiers, deployment evidence, optional HTTPS support, and clear documentation.
+MedCare Appointment Booking Platform is ready to present as an AWS three-tier application project. It includes a Flask booking app, Terraform infrastructure, private network tiers, deployment evidence, optional HTTPS support, and supporting documentation.
 
 ## What Is Complete
 
@@ -20,7 +20,7 @@ MedCare Appointment Booking Platform is ready to present as a recruiter-facing A
 - Flask security headers and HSTS support
 - GitHub Actions workflow
 - Screenshot evidence gallery
-- Recruiter brief and completion notes
+- Review brief and completion notes
 
 ## Documentation Map
 
@@ -30,7 +30,7 @@ MedCare Appointment Booking Platform is ready to present as a recruiter-facing A
 | [Architecture](architecture.md) | Network, traffic flow, security groups, and HTTPS model |
 | [Deployment Guide](deployment-guide.md) | Local and AWS deployment steps |
 | [Screenshot Guide](screenshots.md) | Evidence gallery and capture checklist |
-| [Recruiter Brief](recruiter-brief.md) | Short interview-friendly project summary |
+| [Review Brief](review-brief.md) | Short project summary and technical highlights |
 | [Completion Notes](project-completion.md) | Final status, verified evidence, and future improvements |
 
 ## Verification Summary
