@@ -20,6 +20,8 @@ data "aws_ami" "ubuntu" {
 locals {
   azs = slice(data.aws_availability_zones.available.names, 0, 2)
 
+  enable_https = var.acm_certificate_arn != ""
+
   tags = {
     Project = var.project_name
   }
@@ -144,7 +146,7 @@ resource "aws_route_table_association" "app_private" {
 
 resource "aws_security_group" "alb" {
   name        = "${var.project_name}-alb-sg"
-  description = "Allow public HTTP traffic to the ALB."
+  description = "Allow public web traffic to the ALB."
   vpc_id      = aws_vpc.main.id
 
   ingress {
@@ -152,6 +154,13 @@ resource "aws_security_group" "alb" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = [var.allowed_http_cidr]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.allowed_https_cidr]
   }
 
   egress {
@@ -265,6 +274,7 @@ resource "aws_instance" "web" {
     db_name     = var.db_name
     db_user     = var.db_username
     db_password = var.db_password
+    enable_hsts = local.enable_https ? "true" : "false"
   })
   user_data_replace_on_change = true
 
@@ -310,6 +320,38 @@ resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.app.arn
   port              = 80
   protocol          = "HTTP"
+
+  default_action {
+    type = local.enable_https ? "redirect" : "forward"
+
+    dynamic "redirect" {
+      for_each = local.enable_https ? [1] : []
+      content {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+
+    dynamic "forward" {
+      for_each = local.enable_https ? [] : [1]
+      content {
+        target_group {
+          arn = aws_lb_target_group.web.arn
+        }
+      }
+    }
+  }
+}
+
+resource "aws_lb_listener" "https" {
+  count = local.enable_https ? 1 : 0
+
+  load_balancer_arn = aws_lb.app.arn
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_certificate_arn
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
   default_action {
     type             = "forward"

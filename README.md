@@ -1,6 +1,11 @@
 # MedCare Appointment Booking Platform on AWS
 
-MedCare Appointment Booking Platform is a multi-tier web application project that demonstrates production-style AWS infrastructure for a healthcare scheduling workload.
+[![CI](https://github.com/ucfavour23/medcare-appointment-booking-platform-on-aws/actions/workflows/ci.yml/badge.svg)](https://github.com/ucfavour23/medcare-appointment-booking-platform-on-aws/actions/workflows/ci.yml)
+![Terraform](https://img.shields.io/badge/IaC-Terraform-623CE4)
+![AWS](https://img.shields.io/badge/AWS-ALB%20%7C%20EC2%20%7C%20RDS-232F3E)
+![Python](https://img.shields.io/badge/Python-Flask-3776AB)
+
+MedCare Appointment Booking Platform is a production-style AWS project for a healthcare scheduling workload. It combines a working Flask appointment app with a multi-tier AWS architecture, private compute, private database storage, load balancing, optional HTTPS, CI validation, and deployment evidence.
 
 The project deploys a Flask appointment booking app behind an Application Load Balancer, runs the web tier on EC2 in private subnets, and stores appointments in an RDS MySQL database isolated in private database subnets.
 
@@ -17,18 +22,31 @@ MedCare needs a repeatable way to host an internal appointment booking system wi
 - Infrastructure-as-code deployment
 - Clear operational evidence for recruiters and interview discussions
 
+## What This Demonstrates
+
+| Area | Evidence |
+| --- | --- |
+| Cloud architecture | Public ALB, private EC2 app tier, private RDS database tier |
+| Network design | VPC segmentation, subnet tiers, NAT egress, route tables |
+| Security | Tiered security groups, private database, optional ALB HTTPS, Flask security headers |
+| Automation | Terraform provisioning, EC2 bootstrap, Docker build, GitHub Actions CI |
+| Application delivery | Flask booking workflow, MySQL/RDS mode, SQLite local mode, tests |
+| Operations | Health endpoint, deployment outputs, screenshots, evidence docs |
+
 ## Architecture
 
 ```mermaid
 flowchart TD
     users["Patients and Staff"]
     alb["Public Application Load Balancer"]
+    https["Optional HTTPS Listener<br/>ACM Certificate"]
     ec2["EC2 Web Server<br/>Private App Subnet"]
     rds["RDS MySQL<br/>Private DB Subnets"]
     nat["NAT Gateway"]
     internet["Internet Gateway"]
 
-    users --> alb
+    users --> https
+    https --> alb
     alb --> ec2
     ec2 --> rds
     ec2 --> nat
@@ -43,8 +61,17 @@ flowchart TD
 | Compute | EC2 Ubuntu web server |
 | Database | RDS MySQL, DB subnet group |
 | Traffic | Application Load Balancer, target group, listener |
-| Security | Security groups, IAM instance profile |
+| Security | Security groups, optional ACM-backed HTTPS listener, IAM instance profile |
 | Operations | CloudWatch-ready EC2 role and deployment outputs |
+
+## Security Features
+
+- Public traffic terminates at the Application Load Balancer.
+- EC2 web server is private and only accepts app traffic from the ALB security group.
+- RDS MySQL is private and only accepts database traffic from the web security group.
+- Optional HTTPS listener uses an ACM certificate and redirects HTTP to HTTPS.
+- Flask emits `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, and HSTS when HTTPS is active.
+- Terraform state, local database files, credentials, and generated caches are excluded from git.
 
 ## Repository Structure
 
@@ -93,6 +120,16 @@ terraform apply
 ```
 
 After deployment, open the `alb_dns_name` output in a browser.
+
+### Enable HTTPS
+
+AWS does not issue trusted certificates for the default ALB DNS name. To enable HTTPS, point a domain you own to the ALB and request/validate an ACM certificate in the same AWS region as the load balancer. Then set:
+
+```hcl
+acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/your-certificate-id"
+```
+
+When `acm_certificate_arn` is set, Terraform creates a port 443 HTTPS listener, redirects HTTP to HTTPS, and enables HSTS for the deployed app.
 
 ## Evidence Screenshots
 

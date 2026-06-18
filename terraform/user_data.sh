@@ -11,8 +11,20 @@ from datetime import datetime, timezone
 
 from flask import Flask, redirect, request, url_for
 import pymysql
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
+@app.after_request
+def set_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    if os.getenv("ENABLE_HSTS", "false").lower() == "true" or request.is_secure:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
 
 def conn():
     return pymysql.connect(
@@ -64,7 +76,7 @@ def index():
             appointments = cursor.fetchall()
 
     rows = "".join(
-        f"<article><strong>{item['patient_name']}</strong><span>{item['department']} · {item['appointment_date']}</span><a href='mailto:{item['email']}'>{item['email']}</a></article>"
+        f"<article><strong>{item['patient_name']}</strong><span>{item['department']} &middot; {item['appointment_date']}</span><a href='mailto:{item['email']}'>{item['email']}</a></article>"
         for item in appointments
     ) or "<p>No appointments yet. Create the first booking to confirm the workflow.</p>"
 
@@ -163,6 +175,7 @@ Environment=DB_HOST=${db_host}
 Environment=DB_NAME=${db_name}
 Environment=DB_USER=${db_user}
 Environment=DB_PASSWORD=${db_password}
+Environment=ENABLE_HSTS=${enable_hsts}
 ExecStart=/opt/medcare-appointments/.venv/bin/gunicorn --bind 0.0.0.0:5000 app:app
 Restart=always
 RestartSec=5

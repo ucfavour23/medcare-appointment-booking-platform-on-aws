@@ -21,6 +21,18 @@ terraform apply
 
 Open the `alb_dns_name` output after the target group reports healthy.
 
+## HTTPS
+
+The default ALB DNS name cannot receive a trusted AWS-issued certificate directly. For HTTPS, use a domain you control:
+
+1. Request an ACM certificate for the domain in the same AWS region as the ALB.
+2. Validate the certificate with DNS.
+3. Point the domain to the ALB using a Route 53 alias record or a CNAME.
+4. Set `acm_certificate_arn` in `terraform.tfvars`.
+5. Run `terraform apply`.
+
+When `acm_certificate_arn` is set, Terraform creates a port 443 listener, redirects HTTP to HTTPS, and enables HSTS in the deployed Flask service.
+
 If local Windows Terraform fails while loading the AWS provider schema, validate through WSL from a clean workspace:
 
 ```powershell

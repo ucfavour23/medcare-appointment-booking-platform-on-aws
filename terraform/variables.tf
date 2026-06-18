@@ -22,6 +22,18 @@ variable "allowed_http_cidr" {
   default     = "0.0.0.0/0"
 }
 
+variable "allowed_https_cidr" {
+  description = "CIDR allowed to reach the HTTPS listener on the public ALB."
+  type        = string
+  default     = "0.0.0.0/0"
+}
+
+variable "acm_certificate_arn" {
+  description = "Optional ACM certificate ARN for enabling HTTPS on the ALB. Leave empty for HTTP-only demo deployments."
+  type        = string
+  default     = ""
+}
+
 variable "instance_type" {
   description = "EC2 instance type for the private web server."
   type        = string

@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 
 from flask import Flask, g, redirect, render_template, request, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 try:
     import pymysql
@@ -13,6 +14,7 @@ except ImportError:  # pragma: no cover - optional for local sqlite-only tests
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
     app.config.update(
         SECRET_KEY=os.getenv("SECRET_KEY", "dev"),
         SQLITE_PATH=os.getenv("SQLITE_PATH", os.path.join(os.path.dirname(__file__), "appointments.db")),
@@ -21,6 +23,7 @@ def create_app(test_config=None):
         DB_NAME=os.getenv("DB_NAME", "medcare"),
         DB_USER=os.getenv("DB_USER", "medcare_app"),
         DB_PASSWORD=os.getenv("DB_PASSWORD", ""),
+        ENABLE_HSTS=os.getenv("ENABLE_HSTS", "false").lower() == "true",
     )
 
     if test_config:
@@ -29,6 +32,16 @@ def create_app(test_config=None):
     @app.before_request
     def ensure_schema():
         initialize_database(app)
+
+    @app.after_request
+    def set_security_headers(response):
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        if app.config["ENABLE_HSTS"] or request.is_secure:
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        return response
 
     @app.route("/", methods=["GET"])
     def index():

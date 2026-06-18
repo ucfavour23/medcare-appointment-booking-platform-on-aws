@@ -1,6 +1,11 @@
 output "alb_dns_name" {
   description = "Public URL for the appointment platform."
-  value       = "http://${aws_lb.app.dns_name}"
+  value       = "${var.acm_certificate_arn != "" ? "https" : "http"}://${aws_lb.app.dns_name}"
+}
+
+output "https_enabled" {
+  description = "Whether the ALB HTTPS listener is enabled."
+  value       = var.acm_certificate_arn != ""
 }
 
 output "vpc_id" {

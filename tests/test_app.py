@@ -13,6 +13,8 @@ def test_health_endpoint(tmp_path):
 
     assert response.status_code == 200
     assert response.get_json()["status"] == "ok"
+    assert response.headers["X-Content-Type-Options"] == "nosniff"
+    assert response.headers["X-Frame-Options"] == "DENY"
 
 
 def test_create_appointment(tmp_path):
@@ -34,3 +36,11 @@ def test_create_appointment(tmp_path):
     assert response.status_code == 200
     assert b"Ada Johnson" in response.data
     assert b"Cardiology" in response.data
+
+
+def test_hsts_header_when_forwarded_https(tmp_path):
+    app = create_app({"TESTING": True, "SQLITE_PATH": str(tmp_path / "appointments.db")})
+
+    response = app.test_client().get("/health", headers={"X-Forwarded-Proto": "https"})
+
+    assert response.headers["Strict-Transport-Security"] == "max-age=31536000; includeSubDomains"
