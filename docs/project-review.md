@@ -1,37 +1,51 @@
 # Project Review
 
-## Current Status
+## Summary
 
-The project now has the first complete multi-tier slice:
+MedCare Appointment Booking Platform is ready to present as a recruiter-facing AWS portfolio project. It includes a working Flask application, Terraform infrastructure, private network tiers, deployment evidence, optional HTTPS support, and clear documentation.
+
+## What Is Complete
 
 - Flask appointment booking workflow
 - Local SQLite mode for development and tests
-- MySQL environment configuration for RDS
+- RDS MySQL configuration for AWS deployment
 - Docker runtime files
 - Terraform VPC with public, private app, and private database subnets
 - NAT Gateway for private app outbound access
-- Application Load Balancer
+- Public Application Load Balancer
 - Private EC2 web server
 - Private RDS MySQL database
 - Security groups scoped between tiers
-- Documentation and screenshot checklist
+- Optional ALB HTTPS listener with ACM certificate ARN
+- Flask security headers and HSTS support
+- GitHub Actions workflow
+- Screenshot evidence gallery
+- Recruiter brief and completion notes
 
-## Next Evidence To Capture
+## Documentation Map
 
-1. Capture AWS console screenshots for VPC subnets and RDS details.
-2. Replace CLI evidence screenshots with console screenshots where useful.
-3. Add a final recruiter-facing summary after cost cleanup decision.
+| Document | Purpose |
+| --- | --- |
+| [README](../README.md) | Main GitHub landing page |
+| [Architecture](architecture.md) | Network, traffic flow, security groups, and HTTPS model |
+| [Deployment Guide](deployment-guide.md) | Local and AWS deployment steps |
+| [Screenshot Guide](screenshots.md) | Evidence gallery and capture checklist |
+| [Recruiter Brief](recruiter-brief.md) | Short interview-friendly project summary |
+| [Completion Notes](project-completion.md) | Final status, verified evidence, and future improvements |
 
-## Local Verification
+## Verification Summary
 
 - Python tests pass locally.
 - Terraform formatting passes locally.
-- Terraform validation passes from a persistent WSL workspace at `~/medcare-appointments-tf-validate`. The Windows AWS provider plugin fails while loading schema in this environment, so WSL is the reliable local validation path for this machine.
-- Terraform plan succeeds from WSL and creates a saved `tfplan`.
-- Terraform apply completed successfully.
-- Live ALB URL: `http://medcare-appointments-alb-534651057.us-east-1.elb.amazonaws.com`
-- Current web instance: `i-0db702092e7f31e63`
-- VPC: `vpc-00d32856044ebdc9c`
-- RDS endpoint: `medcare-appointments-mysql.cc5guq6y2nty.us-east-1.rds.amazonaws.com`
-- ALB target health is healthy and the live booking workflow stores/retrieves an appointment from RDS.
-- Final Terraform plan check reports no drift.
+- Terraform validation passes from the WSL validation workspace at `~/medcare-appointments-tf-validate`.
+- Terraform plan succeeds from the WSL validation workspace.
+- Terraform apply completed successfully during evidence capture.
+- ALB target health was healthy during evidence capture.
+- The live booking workflow stored and retrieved an appointment from RDS during evidence capture.
+
+## Remaining Optional Polish
+
+- Add AWS console screenshots for VPC subnet layout.
+- Add AWS console screenshot for RDS private subnet group.
+- Add screenshot of a passing GitHub Actions run.
+- Add HTTPS browser screenshot after configuring a custom domain and ACM certificate.
