@@ -22,6 +22,25 @@ MedCare needs a repeatable way to host an internal appointment booking system wi
 - Infrastructure-as-code deployment
 - Clear operational evidence for recruiters and interview discussions
 
+## Solution
+
+This project packages the booking workflow, AWS infrastructure, deployment automation, validation checks, and evidence screenshots into one repository. The app can run locally with SQLite for fast testing, then run in AWS with MySQL on RDS for a production-style deployment.
+
+## Features
+
+- Patient appointment booking form and recent appointment history
+- Local SQLite mode for development and tests
+- RDS MySQL mode for deployed AWS usage
+- Public Application Load Balancer entry point
+- Private EC2 web server with no public IP
+- Private RDS database subnets
+- Optional HTTPS listener with ACM certificate support
+- HTTP-to-HTTPS redirect when TLS is enabled
+- Flask security headers and HSTS support
+- Docker runtime files
+- GitHub Actions CI for tests, Terraform checks, and Docker build
+- Screenshot evidence for local app, tests, Terraform, AWS deployment, and live service health
+
 ## What This Demonstrates
 
 | Area | Evidence |
@@ -63,6 +82,19 @@ flowchart TD
 | Traffic | Application Load Balancer, target group, listener |
 | Security | Security groups, optional ACM-backed HTTPS listener, IAM instance profile |
 | Operations | CloudWatch-ready EC2 role and deployment outputs |
+
+## Technology Stack
+
+| Area | Tools |
+| --- | --- |
+| Cloud | AWS VPC, ALB, EC2, RDS MySQL, IAM, NAT Gateway |
+| Infrastructure | Terraform |
+| Application | Python, Flask, Gunicorn, PyMySQL |
+| Local data | SQLite |
+| Containers | Docker, Docker Compose |
+| Testing | Pytest |
+| CI/CD | GitHub Actions |
+| Version Control | Git, GitHub |
 
 ## Security Features
 
@@ -131,32 +163,58 @@ acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/your-certi
 
 When `acm_certificate_arn` is set, Terraform creates a port 443 HTTPS listener, redirects HTTP to HTTPS, and enables HSTS for the deployed app.
 
-## Evidence Screenshots
+## Project Evidence
 
-Save important screenshots in `docs/screenshots/`:
+The repository includes validation and deployment screenshots in `docs/screenshots/`.
 
-| Evidence | File |
+| Evidence | Screenshot |
 | --- | --- |
-| Local app running | `app-local.png` |
-| Appointment submission | `appointment-created.png` |
-| Tests passing | `tests-passing.png` |
-| Terraform formatting | `terraform-fmt.png` |
-| Terraform validation | `terraform-validate.png` |
-| Terraform plan | `terraform-plan.png` |
-| Terraform apply outputs | `terraform-apply.png` |
-| VPC subnet layout | `vpc-subnets.png` |
-| ALB target health | `alb-target-health.png` |
-| RDS database details | `rds-database.png` |
-| Live AWS app | `ec2-dashboard-live.png` |
-| EC2 service status | `ec2-systemd-status.png` |
+| Local appointment dashboard | <img src="docs/screenshots/app-local.png" alt="Local appointment dashboard" width="420"> |
+| Appointment created and persisted | <img src="docs/screenshots/appointment-created.png" alt="Appointment created evidence" width="420"> |
+| Python test suite | <img src="docs/screenshots/tests-passing.png" alt="Python tests passing" width="420"> |
+| Terraform formatting | <img src="docs/screenshots/terraform-fmt.png" alt="Terraform formatting evidence" width="420"> |
+| Terraform validation | <img src="docs/screenshots/terraform-validate.png" alt="Terraform validation evidence" width="420"> |
+| Terraform plan | <img src="docs/screenshots/terraform-plan.png" alt="Terraform plan evidence" width="420"> |
+| Terraform apply outputs | <img src="docs/screenshots/terraform-apply.png" alt="Terraform apply evidence" width="420"> |
+| ALB target group health | <img src="docs/screenshots/alb-target-health.png" alt="ALB target health evidence" width="420"> |
+| Live AWS application through ALB | <img src="docs/screenshots/ec2-dashboard-live.png" alt="Live AWS application evidence" width="420"> |
+| EC2 systemd service status | <img src="docs/screenshots/ec2-systemd-status.png" alt="EC2 systemd service status evidence" width="420"> |
 
-## Recruiter Value
+See [screenshot evidence guide](docs/screenshots.md) for the capture checklist and replacement guidance.
 
-This project shows practical AWS engineering skills across networking, security groups, private compute, managed databases, load balancing, Terraform, Python application delivery, and documentation.
+## Validation
+
+Run local checks:
+
+```powershell
+python -m pytest -q
+terraform -chdir=terraform fmt -check
+terraform -chdir=terraform init -backend=false
+terraform -chdir=terraform validate
+docker build -t medcare-appointments:local .
+```
+
+On this Windows machine, the AWS provider plugin can fail while loading Terraform schemas. The reliable validation path used during deployment was the persistent WSL workspace:
+
+```powershell
+wsl.exe bash -lc "cd ~/medcare-appointments-tf-validate && terraform validate"
+```
+
+## Cost Control
+
+This deployment uses small resources, but NAT Gateway, EC2, ALB, and RDS can still create AWS charges. Destroy the stack when the live demo is no longer needed:
+
+```powershell
+terraform destroy
+```
+
+## Skills Demonstrated
+
+AWS networking, private subnet design, load balancing, RDS database deployment, Terraform infrastructure-as-code, Flask backend development, Docker packaging, GitHub Actions CI, security hardening, and production-style project documentation.
 
 ## Current Verification Notes
 
-Local Python tests, Terraform formatting, and Terraform validation pass. On this machine, the Windows AWS provider plugin can fail while loading its schema, so the reliable validation path is the persistent WSL workspace:
+Local Python tests and Terraform formatting pass. On this machine, the Windows AWS provider plugin can fail while loading its schema, so the reliable Terraform validation path is the persistent WSL workspace:
 
 ```powershell
 wsl.exe bash -lc "cd ~/medcare-appointments-tf-validate && terraform validate"
